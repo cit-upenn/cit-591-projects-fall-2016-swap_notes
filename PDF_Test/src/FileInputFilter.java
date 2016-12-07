@@ -34,7 +34,7 @@ public class FileInputFilter {
 		    if (filterCondition) {
 				try {
 					PDPage page = pdoc.getPage(pageNumber - 1);
-					PageAnalyzer eachPage = new PageAnalyzer(page, pageNumber, keywords);
+					PageAnalyzer eachPage = new PageAnalyzer(page, pageNumber, keywords, contents);
 					vectorTable.add(eachPage);
 				} catch (Exception e) {
 					
@@ -54,7 +54,7 @@ public class FileInputFilter {
 		return true;
 	}
 	
-	private boolean outputOrMode (String pageContents) {
+	private boolean outputOrMode(String pageContents) {
 		for (String keyword : keywords) {
 			if (pageContents.contains(keyword)) {
 				return true;
@@ -63,6 +63,8 @@ public class FileInputFilter {
 		
 		return false;
 	}
+	
+
 	
 	public ArrayList<PageAnalyzer> getVectorTable() {
 		return vectorTable;
