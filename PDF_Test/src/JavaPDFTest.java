@@ -9,7 +9,7 @@ public class JavaPDFTest {
 
 	public static void main(String[] args) throws IOException {
 		
-		File pdfFile = new File("bigJava.pdf");
+		File pdfFile = new File("/Users/ydkim/Documents/ebook/Textbooks/591.pdf");
 		PDDocument pdoc = PDDocument.load(pdfFile);
 		System.out.println(pdoc.getNumberOfPages());
 		
