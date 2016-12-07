@@ -33,6 +33,43 @@ public class GUI {
 	 * 1: Order by importance, represented by cosign value of each page
 	 */
 	private int sortByType;
+
+	/**
+	 * @return the fileLocation
+	 */
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	/**
+	 * @return the outputLocation
+	 */
+	public String getOutputLocation() {
+		return outputLocation;
+	}
+
+	/**
+	 * @return the keywords
+	 */
+	public ArrayList<String> getKeywords() {
+		return keywords;
+	}
+
+	/**
+	 * @return the pageNumberLimit
+	 */
+	public int getPageNumberLimit() {
+		return pageNumberLimit;
+	}
+
+	/**
+	 * @return the sortByType
+	 */
+	public int getSortByType() {
+		return sortByType;
+	}
+	
+	
 	
 	
 }
