@@ -23,11 +23,12 @@ public class FileInputFilter {
 		File pdfFile = new File(fileName);
 		PDDocument pdoc = PDDocument.load(pdfFile);
 			
-		for(int pageNumber = 1; pageNumber < pdoc.getNumberOfPages(); pageNumber++){
+		for(int pageNumber = 1; pageNumber <= pdoc.getNumberOfPages(); pageNumber++){
 		    PDFTextStripper pageStripper = new PDFTextStripper();
 		    pageStripper.setStartPage(pageNumber);
 		    pageStripper.setEndPage(pageNumber);
 		    String contents = pageStripper.getText(pdoc).toLowerCase();
+	
 		    
 		    boolean filterCondition = (outputMode.equals("and")) ? outputAndMode(contents) : outputOrMode(contents);
   
@@ -35,6 +36,8 @@ public class FileInputFilter {
 				try {
 					PDPage page = pdoc.getPage(pageNumber - 1);
 					PageAnalyzer eachPage = new PageAnalyzer(page, pageNumber, keywords, contents);
+					eachPage.countFrequency();
+					System.out.println(eachPage.getKeywordFrequency()+ " " +eachPage.getPageNumber());
 					vectorTable.add(eachPage);
 				} catch (Exception e) {
 					

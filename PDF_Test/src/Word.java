@@ -12,6 +12,10 @@ public class Word {
 	public int getFrequency() {
 		return frequency;
 	}
+	
+	public String getWord() {
+		return word;
+	}
 
 //	public int compareTo(Word word) {
 //		if(this.frequency <  word.frequency) {
