@@ -9,43 +9,49 @@ public class PageAnalyzer {
 	private int pageNumber;
 	private ArrayList<String> keywords;
 	private String[] contentsArray;
-	private HashMap<String, Integer> keywordFrequency; 
+	private HashMap<String, Double> keywordFrequency; 
 	
 
 	public PageAnalyzer(PDPage page, int pageNumber, ArrayList<String> keywords, String pageContents) {
 		this.page = page;
 		this.pageNumber = pageNumber;
 		this.keywords = keywords;
-		this.contentsArray = pageContents.replaceAll("\\p{Punct}", "").split(" ");
-		keywordFrequency = new HashMap<String, Integer>();
-		
-		//System.out.println("pageNumber: " + pageNumber);
-		//count keyword frequency
-		
+		this.contentsArray = pageContents.replaceAll("\\p{Punct}", " ").split(" ");
+		keywordFrequency = new HashMap<String, Double>();
+		countFrequency();
+		logWeightWordFrequency();
 	}
 	
 	public int countWords() {
 		return contentsArray.length;
 	}
 	
-	public void countFrequency() {
+	private void countFrequency() {
 		for (int i = 0; i < keywords.size(); i++) {
 			for (String word : contentsArray) {
-				if (word.equals(keywords.get(i))) {
-					if (keywordFrequency.containsKey(word)) {
-						keywordFrequency.replace(word, keywordFrequency.get(word)+1);
+				if (word.contains(keywords.get(i))) {
+					if (keywordFrequency.containsKey(keywords.get(i))) {
+						keywordFrequency.replace(keywords.get(i), keywordFrequency.get(keywords.get(i)) + 1);
 					} else {
-						keywordFrequency.put(word, 1);
+						keywordFrequency.put(keywords.get(i), 1.0);
 					}
 					
 				}
 			}
 		}	
+		System.out.println("This is the keyword frequency terms without log weighting: " + keywordFrequency);
+		System.out.println("This is the page number: " + pageNumber);
+
 	}
 	
+	private void logWeightWordFrequency() {
+		for (String word : keywordFrequency.keySet()) {
+			keywordFrequency.put(word, Math.log10(keywordFrequency.get(word)) + 1);
+		}
 
+	}
 	
-	public HashMap<String, Integer> getKeywordFrequency() {
+	public HashMap<String, Double> getKeywordFrequency() {
 		return keywordFrequency;
 	}
 	
