@@ -20,6 +20,7 @@ public class PageAnalyzer {
 		keywordFrequency = new HashMap<String, Double>();
 		countFrequency();
 		logWeightWordFrequency();
+		lengthNormalize();
 	}
 	
 	public int countWords() {
@@ -47,9 +48,26 @@ public class PageAnalyzer {
 	private void logWeightWordFrequency() {
 		for (String word : keywordFrequency.keySet()) {
 			keywordFrequency.put(word, Math.log10(keywordFrequency.get(word)) + 1);
-		}
-
+		}	
 	}
+	
+	private void lengthNormalize() {
+		
+		double denominator = 0;
+		for (String word : keywordFrequency.keySet()) {
+			denominator += Math.pow(keywordFrequency.get(word), 2);
+		}
+		
+		denominator = Math.sqrt(denominator);
+		for (String word : keywordFrequency.keySet()) {
+			keywordFrequency.put(word, keywordFrequency.get(word) / denominator);
+		}
+		
+//		System.out.println("=========================================================");
+//		System.out.println("This is the length normalized value: " + keywordFrequency);
+	}
+	
+	
 	
 	public HashMap<String, Double> getKeywordFrequency() {
 		return keywordFrequency;
