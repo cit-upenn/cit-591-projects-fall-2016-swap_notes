@@ -3,9 +3,12 @@ import java.io.File;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -18,9 +21,15 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 	Scene scene2;
 	
 	Button button1;
-	Button button2;
+	
+	VBox layout1 = new VBox(20);
+	VBox layout2 = new VBox(10);
+	
+	
+
 	
 	File file;
+	
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -28,7 +37,26 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+
+		TextField fileLocation = new TextField();
+		Button fileLocationButton = new Button("Open File");
+		TextField outputLocation = new TextField();
+		Button outputButton = new Button("Save As");
+		Label keyLabel = new Label("Keywords"); 
+		TextField keywords = new TextField();
+		Label pageNumLabel = new Label("Number of Pages in Output");
+		TextField pageNumberLimit = new TextField();
+		Label sortByLabel = new Label("Sort By...");
 		
+		ChoiceBox<String> sortByType = new ChoiceBox<String>();
+		
+		sortByType.getItems().add("Page Order");
+		sortByType.getItems().add("Relevance");
+		sortByType.setValue("Page Order");
+		
+		Button startButton = new Button("Start");
+		
+	
 		window = primaryStage;
 		
 
@@ -42,16 +70,12 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			
 		});
 		
-		VBox layout1 = new VBox(20);
+
 		layout1.getChildren().addAll(label1, button1);
 		
-		scene1 = new Scene(layout1, 400, 300);
 		
-		button2 = new Button("Choose File");
-			
-		button2.setOnAction(e -> {
-		
-			
+
+		fileLocationButton.setOnAction(e -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Open File");
 			file = fileChooser.showOpenDialog(window);
@@ -60,9 +84,22 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			
 		});
 		
-		StackPane layout2 = new StackPane();
-		layout2.getChildren().add(button2);
-		scene2 = new Scene(layout2, 400, 300);
+		startButton.setOnAction(e -> {
+			
+			isInt(pageNumberLimit, pageNumberLimit.getText());
+			
+			
+			System.out.println("File Location: " + file);
+			System.out.println("Keywords: " + keywords.getText());
+			System.out.println("Sort By: " + sortByType.getValue());
+			
+		});
+		
+		
+		layout2.setPadding(new Insets(20, 20, 20, 20));
+		layout2.getChildren().addAll(fileLocation, fileLocationButton, outputLocation, outputButton, keyLabel, keywords, pageNumLabel, pageNumberLimit, sortByLabel, sortByType, startButton);
+		scene1 = new Scene(layout1, 600, 400);
+		scene2 = new Scene(layout2, 600, 400);
 		
 		
 		
@@ -76,6 +113,22 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		if (event.getSource() == button1) {
 			System.out.println("You just pressed the button.");
 		}
+	}
+	
+	private boolean isInt(TextField input, String message) {
+		
+		try {
+			
+			int pageNum = Integer.parseInt(input.getText());
+			System.out.println("Page Number Limit: " + pageNum);
+			return true;
+			
+		} catch (NumberFormatException nfe) {
+			
+			System.out.println("Page Number Error: " + message + " is not a number");
+			return false;
+		}
+		
 	}
 
 	
