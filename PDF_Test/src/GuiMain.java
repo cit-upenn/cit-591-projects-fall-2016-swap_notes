@@ -1,5 +1,7 @@
 import java.io.File;
 
+import javax.imageio.ImageIO;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,10 +11,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sun.applet.Main;
 
 public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
@@ -69,11 +74,14 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			window.setScene(scene2);
 			
 		});
-		
 
-		layout1.getChildren().addAll(label1, button1);
 		
-		
+		final ImageView selectedImage = new ImageView(); 
+		Image image1 = new Image("file:temp_logo.jpeg");
+		selectedImage.setImage(image1);
+
+		layout1.getChildren().addAll(selectedImage, label1, button1);
+
 
 		fileLocationButton.setOnAction(e -> {
 			FileChooser fileChooser = new FileChooser();
@@ -98,8 +106,8 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		
 		layout2.setPadding(new Insets(20, 20, 20, 20));
 		layout2.getChildren().addAll(fileLocation, fileLocationButton, outputLocation, outputButton, keyLabel, keywords, pageNumLabel, pageNumberLimit, sortByLabel, sortByType, startButton);
-		scene1 = new Scene(layout1, 600, 400);
-		scene2 = new Scene(layout2, 600, 400);
+		scene1 = new Scene(layout1, 600, 500);
+		scene2 = new Scene(layout2, 600, 500);
 		
 		
 		
