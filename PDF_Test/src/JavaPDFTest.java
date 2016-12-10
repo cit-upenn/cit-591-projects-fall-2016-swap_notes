@@ -21,7 +21,7 @@ public class JavaPDFTest {
 		    s.setEndPage(pageNumber);
 		    String contents = s.getText(pdoc).toLowerCase(); 
 		    
-		    if (contents.contains("hashmap")) {
+		    if (contents.contains("R9.6")) {
 //		    	int count = StringUtils.countMatches(contents, "array");
 //		    	System.out.println("It works");
 		    	System.out.println("These are the page numbers: " + pageNumber);

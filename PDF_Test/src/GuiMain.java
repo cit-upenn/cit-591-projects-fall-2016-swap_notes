@@ -88,6 +88,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			fileChooser.setTitle("Open File");
 			file = fileChooser.showOpenDialog(window);
 			
+			fileLocation.setText(file.toString());
 			System.out.println(file);
 			
 		});
