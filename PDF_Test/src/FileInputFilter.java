@@ -35,7 +35,7 @@ public class FileInputFilter {
 		    if (filterCondition) {
 				try {
 					PDPage page = pdoc.getPage(pageNumber - 1);
-					PageAnalyzer eachPage = new PageAnalyzer(page, pageNumber, keywords, contents);
+					PageAnalyzer eachPage = new PageAnalyzer(page, pageNumber, keywords, contents, 0);
 //					eachPage.countFrequency();
 //					System.out.println(eachPage.getKeywordFrequency()+ " " +eachPage.getPageNumber());
 					vectorTable.add(eachPage);

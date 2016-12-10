@@ -9,6 +9,9 @@ public class SwapNotesTester {
 		keywords.add("assemble");
 		String condition = "or";
 		FileInputFilter test = new FileInputFilter("CIT593_HW07-Assembly.pdf", keywords, condition);
+		
+		
+		
 //		test.logWeightWordFrequency();
 	}
 
