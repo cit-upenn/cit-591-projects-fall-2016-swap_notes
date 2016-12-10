@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 
-public class PageAnalyzer implements Comparable<PageAnalyzer> {
+public class AnalyzedPage implements Comparable<AnalyzedPage> {
 
 	private PDPage page;
 	private int pageNumber;
@@ -16,7 +16,7 @@ public class PageAnalyzer implements Comparable<PageAnalyzer> {
 
 
 	//This is the vector space model to judge similarity between input page and the document pages
-	public PageAnalyzer(PDPage page, int pageNumber, ArrayList<String> keywords, String pageContents, int pageCompare) {
+	public AnalyzedPage(PDPage page, int pageNumber, ArrayList<String> keywords, String pageContents, int pageCompare) {
 		this.page = page;
 		this.pageNumber = pageNumber;
 		this.keywords = keywords;
@@ -116,7 +116,7 @@ public class PageAnalyzer implements Comparable<PageAnalyzer> {
 
 		System.out.println("The rank score of this page is : " + rankScore);
 	}
-	
+
 
 	public HashMap<String, Double> getKeywordFrequency() {
 		return keywordImportance;
@@ -130,11 +130,16 @@ public class PageAnalyzer implements Comparable<PageAnalyzer> {
 	public int getPageNumber() {
 		return pageNumber;
 
-}
+	}
 
+	public PDPage getPdPage() {
+		return page;
+	}
+	
+	
 
 	@Override
-	public int compareTo(PageAnalyzer page) {
+	public int compareTo(AnalyzedPage page) {
 		double score = this.getScore();
 		double otherScore = page.getScore();
 		if (score > otherScore) {
@@ -146,4 +151,3 @@ public class PageAnalyzer implements Comparable<PageAnalyzer> {
 		}
 	}
 }
-		

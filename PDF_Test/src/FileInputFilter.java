@@ -8,14 +8,14 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 public class FileInputFilter {
 	
-	private ArrayList<PageAnalyzer> vectorTable;
+	private ArrayList<AnalyzedPage> vectorTable;
 	private ArrayList<String> keywords;
 	private String outputMode;
 	
 	public FileInputFilter(String fileName, ArrayList<String> keywords, String outputMode) throws IOException {
 		this.keywords = keywords;
 		this.outputMode = outputMode;
-		vectorTable = new ArrayList<PageAnalyzer>();
+		vectorTable = new ArrayList<AnalyzedPage>();
 		filter(fileName);	
 	}
 	
@@ -35,7 +35,7 @@ public class FileInputFilter {
 		    if (filterCondition) {
 				try {
 					PDPage page = pdoc.getPage(pageNumber - 1);
-					PageAnalyzer eachPage = new PageAnalyzer(page, pageNumber, keywords, contents, 0);
+					AnalyzedPage eachPage = new AnalyzedPage(page, pageNumber, keywords, contents, 0);
 //					eachPage.countFrequency();
 //					System.out.println(eachPage.getKeywordFrequency()+ " " +eachPage.getPageNumber());
 					vectorTable.add(eachPage);
@@ -69,7 +69,7 @@ public class FileInputFilter {
 	
 
 	
-	public ArrayList<PageAnalyzer> getVectorTable() {
+	public ArrayList<AnalyzedPage> getVectorTable() {
 		return vectorTable;
 	}
 

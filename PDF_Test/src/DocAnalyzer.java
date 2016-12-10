@@ -1,36 +1,68 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.text.PDFTextStripper;
+
 public class DocAnalyzer {
 
-	ArrayList<PageAnalyzer> pdfDocument;
+	ArrayList<AnalyzedPage> analyzedPageList;
 	
-	
-	public DocAnalyzer(ArrayList<PageAnalyzer> pdfDocument) {
-		this.pdfDocument = pdfDocument;
+
+
+	public DocAnalyzer(ArrayList<AnalyzedPage> analyzedPageList) {
+		this.analyzedPageList = analyzedPageList;
+
+	}
+
+	public ArrayList<AnalyzedPage> filterDocument(int pageLimit, int sortByType) {
+
+		//TO DO: implement sort by type 
+		
+		ArrayList<AnalyzedPage> filteredDoc = analyzedPageList; 
+		Collections.sort(filteredDoc, Collections.reverseOrder()) ;
+
+		filteredDoc.subList(pageLimit, filteredDoc.size()).clear();
+		
+		return filteredDoc;
 		
 	}
-	
-	public void filterDocument(int pageLimit, int sortByType) {
-		
-		Collections.sort(pdfDocument, Collections.reverseOrder()) ;
-		
-	}
-	
-	public ArrayList<PageAnalyzer> getDocument() {
-		for (PageAnalyzer page : pdfDocument) {
+
+	public ArrayList<AnalyzedPage> printDocument() {
+		for (AnalyzedPage page : analyzedPageList) {
 			System.out.println(page.getPageNumber());
 			System.out.println(page.getScore());
 		}
-		
-		return pdfDocument;
+
+		return analyzedPageList;
 	}
-	
+
 	public PDDocument makeDocument() {
-		
-		
-		
+
+		PDDocument outputDoc = new PDDocument();
+		for(AnalyzedPage page : analyzedPageList){
+
+			try {
+				PDPage pdpage = page.getPdPage();
+				outputDoc.addPage(pdpage);
+
+			} catch (Exception e) {
+				System.out.println("Error during document creation process");
+			}
+
+		}
+
+		return outputDoc;
+
 	}
-	
-	
+
+
+
 }
+
+
+
+
+
