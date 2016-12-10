@@ -1,4 +1,7 @@
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -121,9 +124,9 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		// This represents the choice box for users to select options
 		ChoiceBox<String> sortByType = new ChoiceBox<String>();
 		GridPane.setConstraints(sortByType, 1, 3);
-		sortByType.getItems().add("Page Order");
-		sortByType.getItems().add("Relevance");
-		sortByType.setValue("Page Order");
+		sortByType.getItems().add("And");
+		sortByType.getItems().add("Or");
+		sortByType.setValue("And");
 		
 		// (10) Tenth Element
 		// This represents the button to create the output file
@@ -152,15 +155,19 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			fileChooser.setTitle("Open File");
 			file = fileChooser.showOpenDialog(window);
 			fileLocation.setText(file.toString());
-			System.out.println(file);
 		});
 
 		summarizeFileButton.setOnAction(e -> {
 			isInt(pageNumberLimit, pageNumberLimit.getText());
-			System.out.println("File Location: " + file);
-			System.out.println("Keywords: " + keywords.getText());
-			System.out.println("Sort By: " + sortByType.getValue());
-			
+			String[] keywordsArray = keywords.getText().toLowerCase().split(" ");
+			ArrayList<String> keywordsList = new ArrayList<>(Arrays.asList(keywordsArray));
+			try {
+				createSummaryDocument(file.toString(), keywordsList, sortByType.getValue().toLowerCase(), Integer.parseInt(pageNumberLimit.getText()));
+			} catch (NumberFormatException e1) {
+				
+			} catch (IOException e1) {
+				
+			}
 		});
 		
 		window.setScene(homePageScene);
@@ -176,21 +183,25 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 	}
 	
 	private boolean isInt(TextField input, String message) {
-		
 		try {
-			
 			int pageNum = Integer.parseInt(input.getText());
 			System.out.println("Page Number Limit: " + pageNum);
 			return true;
-			
-		} catch (NumberFormatException nfe) {
-			
+		} catch (NumberFormatException nfe) {	
 			System.out.println("Page Number Error: " + message + " is not a number");
 			return false;
 		}
-		
 	}
 
+	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit) throws IOException {
+		FileInputFilter filteringPages = new FileInputFilter(fileName, keywords, outputMode);
+		DocAnalyzer docAnalyzer = new DocAnalyzer(filteringPages.getVectorTable());
+		docAnalyzer.printDocument();
+		docAnalyzer.filterDocument(pageNumberLimit, 0);
+		docAnalyzer.printDocument();
+		DocPrinter printer = new DocPrinter(docAnalyzer.makeDocument());
+		printer.saveDocument();
+	}
 	
 
 }
