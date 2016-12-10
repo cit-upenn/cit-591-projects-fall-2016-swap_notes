@@ -4,13 +4,13 @@ import java.util.Collections;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 public class DocAnalyzer {
 
 	ArrayList<AnalyzedPage> analyzedPageList;
-
-
+	PDDocument docInProcess;
 
 	public DocAnalyzer(ArrayList<AnalyzedPage> analyzedPageList) {
 		this.analyzedPageList = analyzedPageList;
@@ -69,6 +69,10 @@ public class DocAnalyzer {
 		return outputDoc;
 
 	}
+	
+	
+
+	
 
 
 
