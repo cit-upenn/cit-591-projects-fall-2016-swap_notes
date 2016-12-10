@@ -36,8 +36,6 @@ public class FileInputFilter {
 				try {
 					PDPage page = pdoc.getPage(pageNumber - 1);
 					AnalyzedPage eachPage = new AnalyzedPage(page, pageNumber, keywords, contents, 0);
-//					eachPage.countFrequency();
-//					System.out.println(eachPage.getKeywordFrequency()+ " " +eachPage.getPageNumber());
 					vectorTable.add(eachPage);
 				} catch (Exception e) {
 					
@@ -63,11 +61,8 @@ public class FileInputFilter {
 				return true;
 			}
 		}
-		
 		return false;
 	}
-	
-
 	
 	public ArrayList<AnalyzedPage> getVectorTable() {
 		return vectorTable;
