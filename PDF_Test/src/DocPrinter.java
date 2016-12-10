@@ -16,14 +16,14 @@ public class DocPrinter {
 	}
 
 
-	public void saveDocument() throws IOException {
+//	public void saveDocument() throws IOException {
+//
+//		documentToPrint.save("outputDoc.pdf");
+//	}
 
-		documentToPrint.save("outputDoc.pdf");
-	}
+	public void saveDocumentAs(String outputFileName) throws IOException {
 
-	public void saveDocumentAs(String savePath) throws IOException {
-
-		documentToPrint.save(savePath);
+		documentToPrint.save(outputFileName + ".pdf");
 	}
 
 

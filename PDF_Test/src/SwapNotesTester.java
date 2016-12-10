@@ -18,7 +18,7 @@ public class SwapNotesTester {
 		
 		
 		DocPrinter printer = new DocPrinter(testdoc.makeDocument());
-		printer.saveDocument();
+//		printer.saveDocument();
 		
 	}
 

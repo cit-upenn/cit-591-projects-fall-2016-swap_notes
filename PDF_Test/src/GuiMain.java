@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -142,12 +141,22 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		sortByType.setValue("Page Order");
 		
 		// (12) 12th Element
+		// This represents the page label for user to choose their output filename 
+		Label outputFileLabel = new Label("Select a name for your file...");
+		GridPane.setConstraints(outputFileLabel, 0, 5);
+		
+		// (13) 13th Element
+		// This represents the page output file name textfield
+		TextField outputFileNameField = new TextField();
+		GridPane.setConstraints(outputFileNameField, 1, 5);
+		
+		// (14) 14th Element
 		// This represents the button to create the output file
 		Button summarizeFileButton = new Button("Summarize book");
-		GridPane.setConstraints(summarizeFileButton, 1, 5);
+		GridPane.setConstraints(summarizeFileButton, 1, 6);
 		
 		
-		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, includePages, includePagesType, sortByType, sortByLabel, summarizeFileButton);
+		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, includePages, includePagesType, sortByType, sortByLabel, outputFileLabel, outputFileNameField, summarizeFileButton);
 		Scene mainPageScene = new Scene(gridOfMainPage, 600, 500);
 //		
 //<--------------------------THE END--------------------------------------->
@@ -173,11 +182,12 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
 		summarizeFileButton.setOnAction(e -> {
 			isInt(pageNumberLimit, pageNumberLimit.getText());
+			String outputFileName = outputFileNameField.getText();
 			int sortPageCondition = (sortByType.getValue().equals("Relevance")) ? 1 : 0;
 			String[] keywordsArray = keywords.getText().toLowerCase().split(" ");
 			ArrayList<String> keywordsList = new ArrayList<>(Arrays.asList(keywordsArray));
 			try {
-				createSummaryDocument(file.toString(), keywordsList, includePagesType.getValue().toLowerCase(), Integer.parseInt(pageNumberLimit.getText()), sortPageCondition);
+				createSummaryDocument(file.toString(), keywordsList, includePagesType.getValue().toLowerCase(), Integer.parseInt(pageNumberLimit.getText()), sortPageCondition, outputFileName);
 			} catch (NumberFormatException e1) {
 				
 			} catch (IOException e1) {
@@ -208,14 +218,14 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		}
 	}
 
-	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition) throws IOException {
+	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition, String outputFileName) throws IOException {
 		FileInputFilter filteringPages = new FileInputFilter(fileName, keywords, outputMode);
 		DocAnalyzer docAnalyzer = new DocAnalyzer(filteringPages.getVectorTable());
 		docAnalyzer.printDocument();
 		docAnalyzer.filterDocument(pageNumberLimit, sortPageCondition);
 		docAnalyzer.printDocument();
 		DocPrinter printer = new DocPrinter(docAnalyzer.makeDocument());
-		printer.saveDocument();
+		printer.saveDocumentAs(outputFileName);
 	}
 	
 
