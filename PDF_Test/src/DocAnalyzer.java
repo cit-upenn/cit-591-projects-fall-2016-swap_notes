@@ -9,7 +9,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 public class DocAnalyzer {
 
 	ArrayList<AnalyzedPage> analyzedPageList;
-	
+
 
 
 	public DocAnalyzer(ArrayList<AnalyzedPage> analyzedPageList) {
@@ -17,17 +17,29 @@ public class DocAnalyzer {
 
 	}
 
+	/**
+	 * This function filters documents based on user input.
+	 * The user can select the sort order and the number of pages for output
+	 * @param pageLimit number of maximum output pages
+	 * @param sortByType 0 for normal page order, 1 for relevance order
+	 * @return new ArrayList of analyzed pages
+	 */
 	public ArrayList<AnalyzedPage> filterDocument(int pageLimit, int sortByType) {
 
-		//TO DO: implement sort by type 
-		
-		ArrayList<AnalyzedPage> filteredDoc = analyzedPageList; 
-		Collections.sort(filteredDoc, Collections.reverseOrder()) ;
+		 
 
-		filteredDoc.subList(pageLimit, filteredDoc.size()).clear();
+		ArrayList<AnalyzedPage> filteredDoc = analyzedPageList; 
 		
+		if (sortByType == 1) {	
+			Collections.sort(filteredDoc, Collections.reverseOrder()) ;
+		}
+
+		if (pageLimit < filteredDoc.size()) {
+			filteredDoc.subList(pageLimit, filteredDoc.size()).clear();
+		}
+
 		return filteredDoc;
-		
+
 	}
 
 	public ArrayList<AnalyzedPage> printDocument() {
