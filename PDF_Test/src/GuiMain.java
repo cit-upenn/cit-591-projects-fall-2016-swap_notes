@@ -117,23 +117,37 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		
 		// (8) Eighth Element
 		// This represents the page label for user option to sort the pages
-		Label sortByLabel = new Label("Sort By...");
-		GridPane.setConstraints(sortByLabel, 0, 3);
+		Label includePages = new Label("Page filtering condition...");
+		GridPane.setConstraints(includePages, 0, 3);
 		
 		// (9) Ninth Element
 		// This represents the choice box for users to select options
-		ChoiceBox<String> sortByType = new ChoiceBox<String>();
-		GridPane.setConstraints(sortByType, 1, 3);
-		sortByType.getItems().add("And");
-		sortByType.getItems().add("Or");
-		sortByType.setValue("And");
+		ChoiceBox<String> includePagesType = new ChoiceBox<String>();
+		GridPane.setConstraints(includePagesType, 1, 3);
+		includePagesType.getItems().add("And");
+		includePagesType.getItems().add("Or");
+		includePagesType.setValue("And");
 		
 		// (10) Tenth Element
+		// This represents the page label for user option to sort the pages
+		Label sortByLabel = new Label("Sort By...");
+		GridPane.setConstraints(sortByLabel, 0, 4);
+		
+		// (11) 11th Element
+		// This represents the choice box for users to select options
+		ChoiceBox<String> sortByType = new ChoiceBox<String>();
+		GridPane.setConstraints(sortByType, 1, 4);
+		sortByType.getItems().add("Page Order");
+		sortByType.getItems().add("Relevance");
+		sortByType.setValue("Page Order");
+		
+		// (12) 12th Element
 		// This represents the button to create the output file
 		Button summarizeFileButton = new Button("Summarize book");
-		GridPane.setConstraints(summarizeFileButton, 1, 4);
+		GridPane.setConstraints(summarizeFileButton, 1, 5);
 		
-		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, sortByLabel, sortByType, summarizeFileButton);
+		
+		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, includePages, includePagesType, sortByType, sortByLabel, summarizeFileButton);
 		Scene mainPageScene = new Scene(gridOfMainPage, 600, 500);
 //		
 //<--------------------------THE END--------------------------------------->
@@ -159,10 +173,11 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
 		summarizeFileButton.setOnAction(e -> {
 			isInt(pageNumberLimit, pageNumberLimit.getText());
+			int sortPageCondition = (sortByType.getValue().equals("Relevance")) ? 1 : 0;
 			String[] keywordsArray = keywords.getText().toLowerCase().split(" ");
 			ArrayList<String> keywordsList = new ArrayList<>(Arrays.asList(keywordsArray));
 			try {
-				createSummaryDocument(file.toString(), keywordsList, sortByType.getValue().toLowerCase(), Integer.parseInt(pageNumberLimit.getText()));
+				createSummaryDocument(file.toString(), keywordsList, includePagesType.getValue().toLowerCase(), Integer.parseInt(pageNumberLimit.getText()), sortPageCondition);
 			} catch (NumberFormatException e1) {
 				
 			} catch (IOException e1) {
@@ -193,11 +208,11 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		}
 	}
 
-	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit) throws IOException {
+	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition) throws IOException {
 		FileInputFilter filteringPages = new FileInputFilter(fileName, keywords, outputMode);
 		DocAnalyzer docAnalyzer = new DocAnalyzer(filteringPages.getVectorTable());
 		docAnalyzer.printDocument();
-		docAnalyzer.filterDocument(pageNumberLimit, 0);
+		docAnalyzer.filterDocument(pageNumberLimit, sortPageCondition);
 		docAnalyzer.printDocument();
 		DocPrinter printer = new DocPrinter(docAnalyzer.makeDocument());
 		printer.saveDocument();
