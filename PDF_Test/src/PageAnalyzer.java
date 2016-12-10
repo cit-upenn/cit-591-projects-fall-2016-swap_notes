@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 
-public class PageAnalyzer {
+public class PageAnalyzer implements Comparable<PageAnalyzer> {
 
 	private PDPage page;
 	private int pageNumber;
@@ -116,7 +116,7 @@ public class PageAnalyzer {
 
 		System.out.println("The rank score of this page is : " + rankScore);
 	}
-
+	
 
 	public HashMap<String, Double> getKeywordFrequency() {
 		return keywordImportance;
@@ -129,5 +129,21 @@ public class PageAnalyzer {
 
 	public int getPageNumber() {
 		return pageNumber;
+
+}
+
+
+	@Override
+	public int compareTo(PageAnalyzer page) {
+		double score = this.getScore();
+		double otherScore = page.getScore();
+		if (score > otherScore) {
+			return 1;
+		} else if (score < otherScore) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 }
+		
