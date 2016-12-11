@@ -27,23 +27,7 @@ public class DocPrinter {
 	}
 
 
-	public ArrayList<BufferedImage> getPreviewList(PDDocument documentToPrint) throws IOException{
 
-		ArrayList<BufferedImage> previewList = new ArrayList<BufferedImage>();
-		
-		PDFRenderer pdfRenderer = new PDFRenderer(documentToPrint);
-		for (int page = 0; page < documentToPrint.getNumberOfPages(); ++page) { 
-			BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
-
-			previewList.add(bim);
-			
-			// suffix in filename will be used as the file format
-			//			ImageIOUtil.writeImage(bim, pdfFilename + "-" + (page+1) + ".png", 300);
-		}
-		documentToPrint.close();
-		
-		return previewList;
-	}
 
 
 }
