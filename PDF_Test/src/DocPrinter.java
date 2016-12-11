@@ -21,9 +21,9 @@ public class DocPrinter {
 //		documentToPrint.save("outputDoc.pdf");
 //	}
 
-	public void saveDocumentAs(String outputFileName) throws IOException {
-
-		documentToPrint.save(outputFileName + ".pdf");
+	public void saveDocumentAs(String outputDirectory, String outputFileName) throws IOException {
+		
+		documentToPrint.save(outputDirectory + "/" + outputFileName + ".pdf");
 	}
 
 

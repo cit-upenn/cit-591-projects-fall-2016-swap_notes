@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sun.applet.Main;
@@ -25,9 +26,10 @@ import sun.applet.Main;
 public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
 	Stage window;
-	
+	private File pdfFileInput;
+	private File outputDirectory;
+
 	private Button startButton;
-	File file;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -151,12 +153,21 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		GridPane.setConstraints(outputFileNameField, 1, 5);
 		
 		// (14) 14th Element
+		TextField outputFileLocation = new TextField();
+		outputFileLocation.setDisable(true);
+		GridPane.setConstraints(outputFileLocation, 1, 6);
+	
+//		// (15) 15th Element
+		Button outputFileLocationButton = new Button("Save file location");
+		GridPane.setConstraints(outputFileLocationButton, 0, 6);
+
+		// (14) 14th Element
 		// This represents the button to create the output file
 		Button summarizeFileButton = new Button("Summarize book");
-		GridPane.setConstraints(summarizeFileButton, 1, 6);
+		GridPane.setConstraints(summarizeFileButton, 1, 7);
 		
 		
-		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, includePages, includePagesType, sortByType, sortByLabel, outputFileLabel, outputFileNameField, summarizeFileButton);
+		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, includePages, includePagesType, sortByType, sortByLabel, outputFileLabel, outputFileNameField, outputFileLocation, outputFileLocationButton, summarizeFileButton);
 		Scene mainPageScene = new Scene(gridOfMainPage, 600, 500);
 //		
 //<--------------------------THE END--------------------------------------->
@@ -176,9 +187,17 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		fileLocationButton.setOnAction(e -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Open File");
-			file = fileChooser.showOpenDialog(window);
-			fileLocation.setText(file.toString());
+			pdfFileInput = fileChooser.showOpenDialog(window);
+			fileLocation.setText(pdfFileInput.toString());
 		});
+		
+		outputFileLocationButton.setOnAction(e -> {
+			DirectoryChooser directoryChooser = new DirectoryChooser();
+			directoryChooser.setTitle("Choose a directory");
+			outputDirectory = directoryChooser.showDialog(window);
+			outputFileLocation.setText(outputDirectory.toString());
+		});
+		
 
 		summarizeFileButton.setOnAction(e -> {
 			isInt(pageNumberLimit, pageNumberLimit.getText());
@@ -187,7 +206,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			String[] keywordsArray = keywords.getText().toLowerCase().split(" ");
 			ArrayList<String> keywordsList = new ArrayList<>(Arrays.asList(keywordsArray));
 			try {
-				createSummaryDocument(file.toString(), keywordsList, includePagesType.getValue().toLowerCase(), Integer.parseInt(pageNumberLimit.getText()), sortPageCondition, outputFileName);
+				createSummaryDocument(pdfFileInput.toString(), keywordsList, includePagesType.getValue().toLowerCase(), Integer.parseInt(pageNumberLimit.getText()), sortPageCondition, outputFileName, outputDirectory.toString());
 			} catch (NumberFormatException e1) {
 				
 			} catch (IOException e1) {
@@ -218,14 +237,14 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		}
 	}
 
-	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition, String outputFileName) throws IOException {
+	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition, String outputFileName, String outputDirectory) throws IOException {
 		FileInputFilter filteringPages = new FileInputFilter(fileName, keywords, outputMode);
 		DocAnalyzer docAnalyzer = new DocAnalyzer(filteringPages.getVectorTable());
 		docAnalyzer.printDocument();
 		docAnalyzer.filterDocument(pageNumberLimit, sortPageCondition);
 		docAnalyzer.printDocument();
 		DocPrinter printer = new DocPrinter(docAnalyzer.makeDocument());
-		printer.saveDocumentAs(outputFileName);
+		printer.saveDocumentAs(outputDirectory, outputFileName);
 	}
 	
 
