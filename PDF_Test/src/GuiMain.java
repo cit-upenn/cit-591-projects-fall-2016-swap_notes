@@ -56,19 +56,19 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		// (1) First Element
 		// Creating the format of the first page upon starting the app
 		GridPane gridOfHomePage = new GridPane();
-		gridOfHomePage.setPadding(new Insets(10, 10, 10, 10));
+		gridOfHomePage.setPadding(new Insets(20, 20, 20, 20));
 		gridOfHomePage.setVgap(8);
 		gridOfHomePage.setHgap(8);
 		
 		// (2) Second Element
 		//This represents the label of the first scene
 		Label homepageTitle = new Label("Hi, this is Swap Notes!"); 
-		GridPane.setConstraints(homepageTitle, 0, 8);
+		GridPane.setConstraints(homepageTitle, 0, 4);
 		
 		// (3) Third Element
 		//This represents the button in the first page.
 		startButton = new Button("Start");
-		GridPane.setConstraints(startButton, 0, 6);
+		GridPane.setConstraints(startButton, 0, 3);
 		
 		// (4) Fourth Element
 		//This represents the homepage image
