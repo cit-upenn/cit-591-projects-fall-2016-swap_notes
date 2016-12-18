@@ -64,8 +64,8 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		
 		// (2) Second Element
 		//This represents the label of the first scene
-		Label homepageTitle = new Label("Hi, this is Swap Notes!"); 
-		GridPane.setConstraints(homepageTitle, 0, 4);
+		Label homepageTitle = new Label("Created by Leon Wee, Yoonduk Kim, Na Luo"); 
+		GridPane.setConstraints(homepageTitle, 0, 8);
 		
 		
 		// (3) Third Element
@@ -83,7 +83,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		//This command adds all the elements into the gridHomepage
 		gridOfHomePage.getChildren().addAll(homepageImage, homepageTitle, startButton);
 		//Setting the homepageScene
-		Scene homePageScene = new Scene(gridOfHomePage, 600, 500);
+		Scene homePageScene = new Scene(gridOfHomePage, 600, 600);
 		homePageScene.getStylesheets().add("style.css");
 		
 //<--------------------------THE END--------------------------------------->
@@ -180,12 +180,12 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
 		// (14) 14th Element
 		// This represents the button to create the output file
-		Button summarizeFileButton = new Button("Summarize book");
+		Button summarizeFileButton = new Button("Summarize");
 		GridPane.setConstraints(summarizeFileButton, 1, 7);
 		
 		//This command adds all the elements into the gridMainpage
 		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, includePages, includePagesType, sortByType, sortByLabel, outputFileLabel, outputFileNameField, outputFileLocation, outputFileLocationButton, summarizeFileButton);
-		Scene mainPageScene = new Scene(gridOfMainPage, 600, 500);
+		Scene mainPageScene = new Scene(gridOfMainPage, 600, 600);
 //		
 //<--------------------------THE END--------------------------------------->
 		

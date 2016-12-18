@@ -12,11 +12,11 @@ import org.apache.pdfbox.text.PDFTextStripper;
  *
  */
 public class FileInputFilter {
-	
+
 	private ArrayList<AnalyzedPage> vectorTable;
 	private ArrayList<String> keywords;
 	private String outputMode;
-	
+
 	/**
 	 * This constructor initializes a FileInputFilter by taking fileName, keywords, outputMode as parameters.
 	 * @param fileName input pdf file path
@@ -30,7 +30,7 @@ public class FileInputFilter {
 		vectorTable = new ArrayList<AnalyzedPage>();
 		filter(fileName);	
 	}
-	
+
 	/**
 	 * This method takes a file and creates a AnalyzedPage object for each page that meets condition, and
 	 * then adds every AnalyzedPage object created to the vectorTable.
@@ -40,27 +40,33 @@ public class FileInputFilter {
 	private void filter(String fileName) throws IOException {
 		File pdfFile = new File(fileName);
 		PDDocument pdoc = PDDocument.load(pdfFile);
-		
-	
+
+
 		for(int pageNumber = 1; pageNumber <= pdoc.getNumberOfPages(); pageNumber++){
-		    PDFTextStripper pageStripper = new PDFTextStripper();
-		    pageStripper.setStartPage(pageNumber);
-		    pageStripper.setEndPage(pageNumber);
-		    String contents = pageStripper.getText(pdoc).toLowerCase();
-		    boolean filterCondition = (outputMode.equals("and")) ? outputAndMode(contents) : outputOrMode(contents);
-  
-		    if (filterCondition) {
+			PDFTextStripper pageStripper = new PDFTextStripper();
+			pageStripper.setStartPage(pageNumber);
+			pageStripper.setEndPage(pageNumber);
+
+			String contents;
+
+
+			contents = pageStripper.getText(pdoc).toLowerCase();
+
+			boolean filterCondition = (outputMode.equals("and")) ? outputAndMode(contents) : outputOrMode(contents);
+
+
+			if (filterCondition) {
 				try {
 					PDPage page = pdoc.getPage(pageNumber - 1);
 					AnalyzedPage eachPage = new AnalyzedPage(page, pageNumber, keywords, contents, 0);
 					vectorTable.add(eachPage);
 				} catch (Exception e) {
-					
+					System.out.println("Exception occurred while analyzing page");
 				}	
-		    }
+			}
 		}
 	}
-	
+
 	/**
 	 * This method checks if the page contains all of keywords when the output mode is AND.
 	 * @param pageContents string contents of a pdf page
@@ -72,10 +78,10 @@ public class FileInputFilter {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * This method checks if the page contains one of keywords when the output mode is OR.
 	 * @param pageContents string contents of a pdf page
@@ -89,7 +95,7 @@ public class FileInputFilter {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * This method can access vectorTable.
 	 * @return vectorTable list of AnalyzedPage objects
