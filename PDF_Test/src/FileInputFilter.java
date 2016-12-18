@@ -6,12 +6,24 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+/**
+ * This class takes a file as input and filters the pages that meets condition.
+ * @author Leon Wee, Yoon Duk Kim, Na Luo
+ *
+ */
 public class FileInputFilter {
 	
 	private ArrayList<AnalyzedPage> vectorTable;
 	private ArrayList<String> keywords;
 	private String outputMode;
 	
+	/**
+	 * This constructor initializes a FileInputFilter by taking fileName, keywords, outputMode as parameters.
+	 * @param fileName
+	 * @param keywords
+	 * @param outputMode
+	 * @throws IOException
+	 */
 	public FileInputFilter(String fileName, ArrayList<String> keywords, String outputMode) throws IOException {
 		this.keywords = keywords;
 		this.outputMode = outputMode;
@@ -19,17 +31,22 @@ public class FileInputFilter {
 		filter(fileName);	
 	}
 	
+	/**
+	 * This method takes a file and creates a AnalyzedPage object for each page that meets condition, and
+	 * then adds every AnalyzedPage object created to the vectorTable.
+	 * @param fileName
+	 * @throws IOException
+	 */
 	private void filter(String fileName) throws IOException {
 		File pdfFile = new File(fileName);
 		PDDocument pdoc = PDDocument.load(pdfFile);
-			
+		
+	
 		for(int pageNumber = 1; pageNumber <= pdoc.getNumberOfPages(); pageNumber++){
 		    PDFTextStripper pageStripper = new PDFTextStripper();
 		    pageStripper.setStartPage(pageNumber);
 		    pageStripper.setEndPage(pageNumber);
 		    String contents = pageStripper.getText(pdoc).toLowerCase();
-	
-		    
 		    boolean filterCondition = (outputMode.equals("and")) ? outputAndMode(contents) : outputOrMode(contents);
   
 		    if (filterCondition) {
@@ -39,12 +56,16 @@ public class FileInputFilter {
 					vectorTable.add(eachPage);
 				} catch (Exception e) {
 					
-				}
-		    	
+				}	
 		    }
 		}
 	}
 	
+	/**
+	 * This method checks if the page contains all of keywords when the output mode is AND.
+	 * @param pageContents
+	 * @return true if page contains all of keywords, false if the page doesn't contains all of keywords.
+	 */
 	private boolean outputAndMode(String pageContents) {
 		for (String keyword : keywords) {
 			if (!pageContents.contains(keyword)) {
@@ -55,6 +76,11 @@ public class FileInputFilter {
 		return true;
 	}
 	
+	/**
+	 * This method checks if the page contains one of keywords when the output mode is OR.
+	 * @param pageContents
+	 * @return true if page contains one of keywords, false if the page doesn't contains one of keywords.
+	 */
 	private boolean outputOrMode(String pageContents) {
 		for (String keyword : keywords) {
 			if (pageContents.contains(keyword)) {
@@ -64,6 +90,10 @@ public class FileInputFilter {
 		return false;
 	}
 	
+	/**
+	 * This method can access vectorTable.
+	 * @return vectorTable
+	 */
 	public ArrayList<AnalyzedPage> getVectorTable() {
 		return vectorTable;
 	}

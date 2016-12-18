@@ -9,41 +9,53 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+/**
+ * This function filters documents based on user input.
+ * The user can select the sort order and the number of pages for output.
+ * @author Leon Wee, Yoon Duk Kim, Na Luo
+ *
+ */
 public class DocAnalyzer {
 
-	ArrayList<AnalyzedPage> analyzedPageList;
-	PDDocument docInProgress;
-
+	private ArrayList<AnalyzedPage> analyzedPageList;
+	private PDDocument docInProgress;	
+	
 	public DocAnalyzer(ArrayList<AnalyzedPage> analyzedPageList) {
 		this.analyzedPageList = analyzedPageList;
 
 	}
 
 	/**
-	 * This function filters documents based on user input.
-	 * The user can select the sort order and the number of pages for output
+	 * This method sorts and filters pages according to the page limitation the user input.
 	 * @param pageLimit number of maximum output pages
 	 * @param sortByType 0 for normal page order, 1 for relevance order
 	 * @return new ArrayList of analyzed pages
 	 */
-	public ArrayList<AnalyzedPage> filterDocument(int pageLimit, int sortByType) {
+	public void filterDocument(int pageLimit, int sortByType) {
 
-		 
-
-		ArrayList<AnalyzedPage> filteredDoc = analyzedPageList; 
-		
+//		ArrayList<AnalyzedPage> filteredDoc = analyzedPageList; 
 		if (sortByType == 1) {	
-			Collections.sort(filteredDoc, Collections.reverseOrder()) ;
+			Collections.sort(analyzedPageList, Collections.reverseOrder()) ;
 		}
-
-		if (pageLimit < filteredDoc.size()) {
-			filteredDoc.subList(pageLimit, filteredDoc.size()).clear();
+		
+		if (pageLimit < analyzedPageList.size()) {
+			analyzedPageList.subList(pageLimit, analyzedPageList.size()).clear();
 		}
-
-		return filteredDoc;
 
 	}
-
+	
+	/**
+	 * This method can access analyzedPageList
+	 * @return analyzedPageList
+	 */
+	public ArrayList<AnalyzedPage> getAnalyzedPageList() {
+		return analyzedPageList;
+	}
+    
+	/**
+	 * This 
+	 * @return
+	 */
 	public ArrayList<AnalyzedPage> printDocument() {
 		for (AnalyzedPage page : analyzedPageList) {
 			System.out.println(page.getPageNumber());
@@ -53,6 +65,10 @@ public class DocAnalyzer {
 		return analyzedPageList;
 	}
 
+	/**
+	 * This method will convert analyzedPageList to an output document.
+	 * @return output document
+	 */
 	public PDDocument makeDocument() {
 
 		PDDocument outputDoc = new PDDocument();
@@ -68,12 +84,12 @@ public class DocAnalyzer {
 
 		}
 
-		outputDoc = docInProgress;
+//		outputDoc = docInProgress;
 		return outputDoc;
 
 	}
 	
-	
+
 	public ArrayList<BufferedImage> getPreviewList() throws IOException{
 
 		ArrayList<BufferedImage> previewList = new ArrayList<BufferedImage>();
