@@ -19,7 +19,7 @@ public class DocAnalyzer {
 
 	private ArrayList<AnalyzedPage> analyzedPageList;
 	private PDDocument docInProgress;	
-	
+
 	public DocAnalyzer(ArrayList<AnalyzedPage> analyzedPageList) {
 		this.analyzedPageList = analyzedPageList;
 
@@ -33,17 +33,17 @@ public class DocAnalyzer {
 	 */
 	public void filterDocument(int pageLimit, int sortByType) {
 
-//		ArrayList<AnalyzedPage> filteredDoc = analyzedPageList; 
+		//		ArrayList<AnalyzedPage> filteredDoc = analyzedPageList; 
 		if (sortByType == 1) {	
 			Collections.sort(analyzedPageList, Collections.reverseOrder()) ;
 		}
-		
+
 		if (pageLimit < analyzedPageList.size()) {
 			analyzedPageList.subList(pageLimit, analyzedPageList.size()).clear();
 		}
 
 	}
-	
+
 	/**
 	 * This method can access analyzedPageList
 	 * @return analyzedPageList
@@ -51,18 +51,17 @@ public class DocAnalyzer {
 	public ArrayList<AnalyzedPage> getAnalyzedPageList() {
 		return analyzedPageList;
 	}
-    
+
+
 	/**
-	 * This 
-	 * @return
+	 * Check the outputs by printing to console
 	 */
-	public ArrayList<AnalyzedPage> printDocument() {
+	public void printDocument() {
 		for (AnalyzedPage page : analyzedPageList) {
 			System.out.println(page.getPageNumber());
 			System.out.println(page.getScore());
 		}
 
-		return analyzedPageList;
 	}
 
 	/**
@@ -84,30 +83,35 @@ public class DocAnalyzer {
 
 		}
 
-//		outputDoc = docInProgress;
+		//		outputDoc = docInProgress;
 		return outputDoc;
 
 	}
-	
 
+	/**
+	 * Returns an arraylist of buffered image files of each page in the document.
+	 * Saved for future implementation of the preview feature.
+	 * @return list of page in image format
+	 * @throws IOException
+	 */
 	public ArrayList<BufferedImage> getPreviewList() throws IOException{
 
 		ArrayList<BufferedImage> previewList = new ArrayList<BufferedImage>();
-		
+
 		PDFRenderer pdfRenderer = new PDFRenderer(docInProgress);
 		for (int page = 0; page < docInProgress.getNumberOfPages(); ++page) { 
 			BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
 
 			previewList.add(bim);
-			
+
 			// suffix in filename will be used as the file format
 			//			ImageIOUtil.writeImage(bim, pdfFilename + "-" + (page+1) + ".png", 300);
 		}
 		docInProgress.close();
-		
+
 		return previewList;
 	}
-	
+
 
 
 

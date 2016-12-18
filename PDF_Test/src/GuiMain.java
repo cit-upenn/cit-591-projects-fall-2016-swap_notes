@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -59,21 +60,24 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		gridOfHomePage.setPadding(new Insets(20, 20, 20, 20));
 		gridOfHomePage.setVgap(8);
 		gridOfHomePage.setHgap(8);
+		gridOfHomePage.setAlignment(Pos.CENTER);
 		
 		// (2) Second Element
 		//This represents the label of the first scene
 		Label homepageTitle = new Label("Hi, this is Swap Notes!"); 
 		GridPane.setConstraints(homepageTitle, 0, 4);
 		
+		
 		// (3) Third Element
 		//This represents the button in the first page.
 		startButton = new Button("Start");
 		GridPane.setConstraints(startButton, 0, 3);
 		
+		
 		// (4) Fourth Element
 		//This represents the homepage image
 		final ImageView homepageImage = new ImageView(); 
-		Image swapPhoto = new Image("file:temp_logo.jpeg");
+		Image swapPhoto = new Image("file:swap_logo_new.jpg");
 		homepageImage.setImage(swapPhoto);
 		
 		//This command adds all the elements into the gridHomepage
@@ -96,6 +100,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		gridOfMainPage.setPadding(new Insets(10, 10, 10, 10));
 		gridOfMainPage.setVgap(8);
 		gridOfMainPage.setHgap(8);
+		gridOfMainPage.setAlignment(Pos.CENTER);
 		
 		// (2) Second Element
 		//This represents the textfield where the user will put the file
@@ -200,7 +205,12 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Open File");
 			pdfFileInput = fileChooser.showOpenDialog(window);
-			fileLocation.setText(pdfFileInput.toString());
+			try{
+				fileLocation.setText(pdfFileInput.toString());
+			}
+			catch(NullPointerException npe){
+				System.out.println("Input for file location is required!");
+			}
 		});
 		
 		//This allows the user to select where they want to save the PDF file.
@@ -261,14 +271,17 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 	}
 
 	/**
-	 * This method runs the SwapNotes app.
-	 * @param fileName
-	 * @param keywords
-	 * @param outputMode
-	 * @param pageNumberLimit
-	 * @param sortPageCondition
-	 * @param outputFileName
-	 * @param outputDirectory
+	 * This method runs the SwapNotes app. 
+	 * It first filters the input pdf file with the FileInputFilter class find the relevant pages.
+	 * It then uses the DocAnalyzer class to sort the pages by importance/order and limits the number of pages in the document.
+	 * The document is saved as a PDDocument object and is saved using the DocPrinter class.
+	 * @param fileName input pdf file path
+	 * @param keywords list of keywords
+	 * @param outputMode determines whether we should use AND or OR operator for multiple keywords
+	 * @param pageNumberLimit maximum number of pages that the user wants
+	 * @param sortPageCondition how to sort output document. 0 for normal page order, 1 for relevance order
+	 * @param outputFileName name of the output file
+	 * @param outputDirectory directory path of the output file
 	 * @throws IOException
 	 */
 	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition, String outputFileName, String outputDirectory) throws IOException {
