@@ -23,6 +23,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sun.applet.Main;
 
+/**
+ * This class represents the GUI (Graphical User Interface) for SwapNotes.
+ * @author Leon Wee, Yoon Duk Kim, Na Luo
+ *
+ */
 public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
 	Stage window;
@@ -31,10 +36,17 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 
 	private Button startButton;
 	
+	/**
+	 * This is the constructor for the class. It automatically launches the app.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	/**
+	 * This method is automatically called when we launch the app.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -44,19 +56,19 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		// (1) First Element
 		// Creating the format of the first page upon starting the app
 		GridPane gridOfHomePage = new GridPane();
-		gridOfHomePage.setPadding(new Insets(10, 10, 10, 10));
+		gridOfHomePage.setPadding(new Insets(20, 20, 20, 20));
 		gridOfHomePage.setVgap(8);
 		gridOfHomePage.setHgap(8);
 		
 		// (2) Second Element
 		//This represents the label of the first scene
 		Label homepageTitle = new Label("Hi, this is Swap Notes!"); 
-		GridPane.setConstraints(homepageTitle, 0, 8);
+		GridPane.setConstraints(homepageTitle, 0, 4);
 		
 		// (3) Third Element
 		//This represents the button in the first page.
 		startButton = new Button("Start");
-		GridPane.setConstraints(startButton, 0, 6);
+		GridPane.setConstraints(startButton, 0, 3);
 		
 		// (4) Fourth Element
 		//This represents the homepage image
@@ -166,7 +178,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		Button summarizeFileButton = new Button("Summarize book");
 		GridPane.setConstraints(summarizeFileButton, 1, 7);
 		
-		
+		//This command adds all the elements into the gridMainpage
 		gridOfMainPage.getChildren().addAll(fileLocation, fileLocationButton, keywords, keywordsLabel, pageLimitLabel, pageNumberLimit, includePages, includePagesType, sortByType, sortByLabel, outputFileLabel, outputFileNameField, outputFileLocation, outputFileLocationButton, summarizeFileButton);
 		Scene mainPageScene = new Scene(gridOfMainPage, 600, 500);
 //		
@@ -183,7 +195,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			window.setScene(mainPageScene);
 		});
 
-
+		//This allows the user to select which PDF files they want to summarize
 		fileLocationButton.setOnAction(e -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Open File");
@@ -191,6 +203,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 			fileLocation.setText(pdfFileInput.toString());
 		});
 		
+		//This allows the user to select where they want to save the PDF file.
 		outputFileLocationButton.setOnAction(e -> {
 			DirectoryChooser directoryChooser = new DirectoryChooser();
 			directoryChooser.setTitle("Choose a directory");
@@ -199,6 +212,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		});
 		
 
+		//This lets us pass in all the arguments from the GUI to the main Java app.
 		summarizeFileButton.setOnAction(e -> {
 			isInt(pageNumberLimit, pageNumberLimit.getText());
 			String outputFileName = outputFileNameField.getText();
@@ -219,6 +233,9 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		window.show();
 	}
 
+	/**
+	 * This method handles and prints out a message to the user that they have pressed the button
+	 */
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource() == startButton) {
@@ -226,6 +243,12 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		}
 	}
 	
+	/**
+	 * This method checks if the user has entered integers in the field.
+	 * @param input
+	 * @param message
+	 * @return
+	 */
 	private boolean isInt(TextField input, String message) {
 		try {
 			int pageNum = Integer.parseInt(input.getText());
@@ -237,6 +260,17 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		}
 	}
 
+	/**
+	 * This method runs the SwapNotes app.
+	 * @param fileName
+	 * @param keywords
+	 * @param outputMode
+	 * @param pageNumberLimit
+	 * @param sortPageCondition
+	 * @param outputFileName
+	 * @param outputDirectory
+	 * @throws IOException
+	 */
 	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition, String outputFileName, String outputDirectory) throws IOException {
 		FileInputFilter filteringPages = new FileInputFilter(fileName, keywords, outputMode);
 		DocAnalyzer docAnalyzer = new DocAnalyzer(filteringPages.getVectorTable());
