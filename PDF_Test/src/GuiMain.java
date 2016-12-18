@@ -100,6 +100,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 		gridOfMainPage.setPadding(new Insets(10, 10, 10, 10));
 		gridOfMainPage.setVgap(8);
 		gridOfMainPage.setHgap(8);
+		gridOfMainPage.setAlignment(Pos.CENTER);
 		
 		// (2) Second Element
 		//This represents the textfield where the user will put the file
