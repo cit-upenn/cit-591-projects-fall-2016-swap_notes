@@ -47,10 +47,8 @@ public class FileInputFilter {
 			pageStripper.setStartPage(pageNumber);
 			pageStripper.setEndPage(pageNumber);
 
-			String contents;
-
-
-			contents = pageStripper.getText(pdoc).toLowerCase();
+			
+			String contents = pageStripper.getText(pdoc).toLowerCase();
 
 			boolean filterCondition = (outputMode.equals("and")) ? outputAndMode(contents) : outputOrMode(contents);
 
