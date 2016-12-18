@@ -23,11 +23,11 @@ public class AnalyzedPage implements Comparable<AnalyzedPage> {
 	//This is the vector space model to judge similarity between input page and the document pages
 	/**
 	 * This constructor initializes a AnalyzedPage object.
-	 * @param page
-	 * @param pageNumber
-	 * @param keywords
-	 * @param pageContents
-	 * @param pageCompare
+	 * @param page PDPage object
+	 * @param pageNumber page number identifier
+	 * @param keywords list of keywords
+	 * @param pageContents string contents of a page
+	 * @param pageCompare Comparison algorithm, set to 0 by default. 1 = page-by-page vector space analysis. 2 = adjusted vector space model using relative frequency. 
 	 */
 	public AnalyzedPage(PDPage page, int pageNumber, ArrayList<String> keywords, String pageContents, int pageCompare) {
 		this.page = page;
@@ -66,7 +66,7 @@ public class AnalyzedPage implements Comparable<AnalyzedPage> {
 	}
     
 	/**
-	 * This method does vector space analysis.
+	 * This method does vector space analysis, by normalizing the log weight of the word's frequency.
 	 */
 	private void doVectorSpaceAnalysis() {
 		keywordImportance = new HashMap<String, Double>();
@@ -135,7 +135,7 @@ public class AnalyzedPage implements Comparable<AnalyzedPage> {
     
 	/**
 	 * This method can access the keywordImportance.
-	 * @return keywordImportance
+	 * @return keywordImportance the hashmap of keyword and their relative importance
 	 */
 	public HashMap<String, Double> getKeywordFrequency() {
 		return keywordImportance;
@@ -143,7 +143,7 @@ public class AnalyzedPage implements Comparable<AnalyzedPage> {
 
 	/**
 	 * This method can access the rankScore.
-	 * @return rankScore
+	 * @return rankScore the final output used for comparing page importance
 	 */
 	public double getScore() {
 		return rankScore;

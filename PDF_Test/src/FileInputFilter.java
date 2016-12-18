@@ -19,9 +19,9 @@ public class FileInputFilter {
 	
 	/**
 	 * This constructor initializes a FileInputFilter by taking fileName, keywords, outputMode as parameters.
-	 * @param fileName
-	 * @param keywords
-	 * @param outputMode
+	 * @param fileName input pdf file path
+	 * @param keywords list of keywords
+	 * @param outputMode determines whether we should use AND or OR operator for multiple keywords
 	 * @throws IOException
 	 */
 	public FileInputFilter(String fileName, ArrayList<String> keywords, String outputMode) throws IOException {
@@ -34,7 +34,7 @@ public class FileInputFilter {
 	/**
 	 * This method takes a file and creates a AnalyzedPage object for each page that meets condition, and
 	 * then adds every AnalyzedPage object created to the vectorTable.
-	 * @param fileName
+	 * @param fileName input pdf file path
 	 * @throws IOException
 	 */
 	private void filter(String fileName) throws IOException {
@@ -63,7 +63,7 @@ public class FileInputFilter {
 	
 	/**
 	 * This method checks if the page contains all of keywords when the output mode is AND.
-	 * @param pageContents
+	 * @param pageContents string contents of a pdf page
 	 * @return true if page contains all of keywords, false if the page doesn't contains all of keywords.
 	 */
 	private boolean outputAndMode(String pageContents) {
@@ -78,7 +78,7 @@ public class FileInputFilter {
 	
 	/**
 	 * This method checks if the page contains one of keywords when the output mode is OR.
-	 * @param pageContents
+	 * @param pageContents string contents of a pdf page
 	 * @return true if page contains one of keywords, false if the page doesn't contains one of keywords.
 	 */
 	private boolean outputOrMode(String pageContents) {
@@ -92,7 +92,7 @@ public class FileInputFilter {
 	
 	/**
 	 * This method can access vectorTable.
-	 * @return vectorTable
+	 * @return vectorTable list of AnalyzedPage objects
 	 */
 	public ArrayList<AnalyzedPage> getVectorTable() {
 		return vectorTable;
