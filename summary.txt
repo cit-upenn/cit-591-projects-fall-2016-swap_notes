@@ -1,1 +1,36 @@
 Swap Notes: PDF Summarizer
+
+Swap Notes creates an abridged version of a PDF file based on user input. 
+The application uses linear search to go through the PDF document and filter pages that contain keywords given by the user. 
+It then represents each page as a vector using hash maps containing key-value pairs of each word and their relative frequency.
+Depending on user input, the application can sort the result pages by their original order or the order of relevance to the keywords.
+The document is abridged to a length as specified by the user and saved as a PDF file.
+
+
+Github repo link
+https://github.com/cit-upenn/cit-591-projects-fall-2016-swap_notes
+
+
+Work Breakdown
+
+Group (as three)
+- Idea brainstorming
+- Class design
+
+Pair (Leon, Yoonduk)
+- I/O: FileInputFilter, DocPrinter 
+- GuiMain implementation using JavaFX
+
+Pair (Leon, Na)
+- Page ranking algorithm: DocAnalyzer, AnalyzedPage 
+
+Pair (Yoonduk, Na)
+- Overall class implmentation: DocAnalyzer, AnalyzedPage
+- Logo design
+- Readme writeup
+
+Leon
+- JUnit testing
+
+Yoonduk
+- Summary and manual
