@@ -287,9 +287,7 @@ public class GuiMain extends Application implements EventHandler<ActionEvent>{
 	private void createSummaryDocument(String fileName, ArrayList<String> keywords, String outputMode, int pageNumberLimit, int sortPageCondition, String outputFileName, String outputDirectory) throws IOException {
 		FileInputFilter filteringPages = new FileInputFilter(fileName, keywords, outputMode);
 		DocAnalyzer docAnalyzer = new DocAnalyzer(filteringPages.getVectorTable());
-		docAnalyzer.printDocument();
 		docAnalyzer.filterDocument(pageNumberLimit, sortPageCondition);
-		docAnalyzer.printDocument();
 		DocPrinter printer = new DocPrinter(docAnalyzer.makeDocument());
 		printer.saveDocumentAs(outputDirectory, outputFileName);
 	}

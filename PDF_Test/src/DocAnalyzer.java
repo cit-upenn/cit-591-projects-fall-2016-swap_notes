@@ -56,13 +56,13 @@ public class DocAnalyzer {
 	/**
 	 * Check the outputs by printing to console
 	 */
-	public void printDocument() {
-		for (AnalyzedPage page : analyzedPageList) {
-			System.out.println(page.getPageNumber());
-			System.out.println(page.getScore());
-		}
-
-	}
+//	public void printDocument() {
+//		for (AnalyzedPage page : analyzedPageList) {
+//			System.out.println(page.getPageNumber());
+//			System.out.println(page.getScore());
+//		}
+//
+//	}
 
 	/**
 	 * This method will convert analyzedPageList to an output document.
@@ -83,7 +83,7 @@ public class DocAnalyzer {
 
 		}
 
-		//		outputDoc = docInProgress;
+		docInProgress = outputDoc;
 		return outputDoc;
 
 	}
@@ -94,23 +94,23 @@ public class DocAnalyzer {
 	 * @return list of page in image format
 	 * @throws IOException
 	 */
-	public ArrayList<BufferedImage> getPreviewList() throws IOException{
-
-		ArrayList<BufferedImage> previewList = new ArrayList<BufferedImage>();
-
-		PDFRenderer pdfRenderer = new PDFRenderer(docInProgress);
-		for (int page = 0; page < docInProgress.getNumberOfPages(); ++page) { 
-			BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
-
-			previewList.add(bim);
-
-			// suffix in filename will be used as the file format
-			//			ImageIOUtil.writeImage(bim, pdfFilename + "-" + (page+1) + ".png", 300);
-		}
-		docInProgress.close();
-
-		return previewList;
-	}
+//	public ArrayList<BufferedImage> getPreviewList() throws IOException{
+//
+//		ArrayList<BufferedImage> previewList = new ArrayList<BufferedImage>();
+//
+//		PDFRenderer pdfRenderer = new PDFRenderer(docInProgress);
+//		for (int page = 0; page < docInProgress.getNumberOfPages(); ++page) { 
+//			BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
+//
+//			previewList.add(bim);
+//
+//			// suffix in filename will be used as the file format
+//			//			ImageIOUtil.writeImage(bim, pdfFilename + "-" + (page+1) + ".png", 300);
+//		}
+//		docInProgress.close();
+//
+//		return previewList;
+//	}
 
 
 

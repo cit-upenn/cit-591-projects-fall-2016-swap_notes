@@ -25,11 +25,6 @@ public class DocPrinter {
 	}
 
 
-//	public void saveDocument() throws IOException {
-//
-//		documentToPrint.save("outputDoc.pdf");
-//	}
-
 	/**
 	 * Saves document as a pdf file to the given directory
 	 * @param outputDirectory location of the output directory

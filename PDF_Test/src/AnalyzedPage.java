@@ -69,7 +69,6 @@ public class AnalyzedPage implements Comparable<AnalyzedPage> {
 	 * This method does vector space analysis, by normalizing the log weight of the word's frequency.
 	 */
 	private void doVectorSpaceAnalysis() {
-		keywordImportance = new HashMap<String, Double>();
 		countFrequency();
 		logWeightWordFrequency();
 		lengthNormalize();
@@ -100,6 +99,7 @@ public class AnalyzedPage implements Comparable<AnalyzedPage> {
 	private void logWeightWordFrequency() {
 		for (String word : keywordImportance.keySet()) {
 			keywordImportance.put(word, Math.log10(keywordImportance.get(word)) + 1);
+			System.out.println(keywordImportance.get(word));
 		}	
 	}
     

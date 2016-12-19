@@ -1,10 +1,12 @@
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -12,91 +14,84 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DocAnalyzerTest {
 
+public class DocAnalyzerTest {
+	
+	private ArrayList<String> keywords;
+	private File pdfFile;
+	private PDDocument pDoc;
+	private PDPage page1;
+	private PDPage page2;
+	private PDFTextStripper pageStripper;
+	private String pageOneContents;
+	private String pageTwoContents;
+	private AnalyzedPage firstAnalyzedPage;
+	private AnalyzedPage secondAnalyzedPage;
+	private ArrayList<AnalyzedPage> passingInAnalyzedPage;
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	
 	@Before
 	public void setUp() throws Exception {
+		keywords = new ArrayList<String>();
+		keywords.add("programming");		
+		pdfFile = new File("hw2.pdf");
+		pDoc = PDDocument.load(pdfFile);
+		page1 = pDoc.getPage(0);
+		page2 = pDoc.getPage(1);
+		pageStripper = new PDFTextStripper();
+	    pageStripper.setStartPage(1);
+	    pageStripper.setEndPage(1);
+	    pageOneContents = pageStripper.getText(pDoc).toLowerCase();
+	    pageStripper.setStartPage(2);
+	    pageStripper.setEndPage(2);
+	    pageTwoContents = pageStripper.getText(pDoc).toLowerCase();
+		firstAnalyzedPage = new AnalyzedPage(page1, 1, keywords, pageOneContents, 0);
+		secondAnalyzedPage = new AnalyzedPage(page2, 2, keywords, pageTwoContents, 0);
+		passingInAnalyzedPage = new ArrayList<>();
+		passingInAnalyzedPage.add(secondAnalyzedPage);
+		passingInAnalyzedPage.add(firstAnalyzedPage);
+		System.setOut(new PrintStream(outContent));
 	}
 
 	@Test
-	public void testFilterDocumentSort() throws IOException {
-		ArrayList<String> keywords = new ArrayList<String>();
-		keywords.add("programming");
-		FileInputFilter test = new FileInputFilter("hw2.pdf", keywords, "or");
-		
-		File pdfFile = new File("hw2.pdf");
-		PDDocument pdoc = PDDocument.load(pdfFile);
-		PDPage page1 = pdoc.getPage(0);
-		PDPage page2 = pdoc.getPage(1);
-		
-		PDFTextStripper pageStripper = new PDFTextStripper();
-	    pageStripper.setStartPage(1);
-	    pageStripper.setEndPage(1);
-	    String contents1 = pageStripper.getText(pdoc).toLowerCase();
-	    pageStripper.setStartPage(2);
-	    pageStripper.setEndPage(2);
-	    String contents2 = pageStripper.getText(pdoc).toLowerCase();
-		
-		AnalyzedPage analyzedPage1 = new AnalyzedPage(page1, 1, keywords, contents1, 0);
-		AnalyzedPage analyzedPage2 = new AnalyzedPage(page2, 2, keywords, contents2, 0);
-		ArrayList<AnalyzedPage> actualAnalyzedPage = new ArrayList<>();
-		actualAnalyzedPage.add(analyzedPage2);
-		actualAnalyzedPage.add(analyzedPage1);
-		
+	public void testFilterDocumentSort() throws IOException {		
 		ArrayList<AnalyzedPage> expectedAnalyzedPage = new ArrayList<>();
-		expectedAnalyzedPage.add(analyzedPage1);
-		expectedAnalyzedPage.add(analyzedPage2);
+		expectedAnalyzedPage.add(firstAnalyzedPage);
+		expectedAnalyzedPage.add(secondAnalyzedPage);
 		
-		DocAnalyzer doc = new DocAnalyzer(actualAnalyzedPage);
-		int i = 0;
-		doc.filterDocument(2, 1);
+		DocAnalyzer doc = new DocAnalyzer(passingInAnalyzedPage);
+		int index = 0;
+		doc.filterDocument(2, 1);		
 		for (AnalyzedPage page : doc.getAnalyzedPageList()) {
-			assertEquals(expectedAnalyzedPage.get(i).getPageNumber(), page.getPageNumber());
-			i++;
+			assertEquals(expectedAnalyzedPage.get(index).getPageNumber(), page.getPageNumber());
+			index++;
 		}
 		
 	}
 	
-	public void testMakeDocument() throws IOException {
-		ArrayList<String> keywords = new ArrayList<String>();
-		keywords.add("programming");
-		FileInputFilter test = new FileInputFilter("hw2.pdf", keywords, "or");
-		
-		File pdfFile = new File("hw2.pdf");
-		PDDocument pdoc = PDDocument.load(pdfFile);
-		PDPage page1 = pdoc.getPage(0);
-		PDPage page2 = pdoc.getPage(1);
-		
-		PDFTextStripper pageStripper = new PDFTextStripper();
-	    pageStripper.setStartPage(1);
-	    pageStripper.setEndPage(1);
-	    String contents1 = pageStripper.getText(pdoc).toLowerCase();
-	    pageStripper.setStartPage(2);
-	    pageStripper.setEndPage(2);
-	    String contents2 = pageStripper.getText(pdoc).toLowerCase();
-		
-		AnalyzedPage analyzedPage1 = new AnalyzedPage(page1, 1, keywords, contents1, 0);
-		AnalyzedPage analyzedPage2 = new AnalyzedPage(page2, 2, keywords, contents2, 0);
-		ArrayList<AnalyzedPage> actualAnalyzedPage = new ArrayList<>();
-		actualAnalyzedPage.add(analyzedPage2);
-		actualAnalyzedPage.add(analyzedPage1);
-		
+	@Test
+	public void testFilterDocumentPageLimit() throws IOException {
 		ArrayList<AnalyzedPage> expectedAnalyzedPage = new ArrayList<>();
-		expectedAnalyzedPage.add(analyzedPage1);
-		expectedAnalyzedPage.add(analyzedPage2);
-		
-		DocAnalyzer doc = new DocAnalyzer(actualAnalyzedPage);
-		doc.filterDocument(2, 1);
-//		doc.makeDocument(); // This is actual output PDF document
-		
-		PDDocument expectedOutputDoc = new PDDocument();
-		expectedOutputDoc.addPage(page1);
-		expectedOutputDoc.addPage(page2);
-//		assertEquals(expectedOutputDoc, doc.makeDocument());
-//		assertTrue(expectedOutputDoc.equals(doc.makeDocument()));
-		Assert.assertTrue(EqualsBuilder.reflectionEquals(expectedOutputDoc, doc.makeDocument()));
-
+		expectedAnalyzedPage.add(firstAnalyzedPage);		
+		DocAnalyzer doc = new DocAnalyzer(passingInAnalyzedPage);
+		int index = 0;
+		doc.filterDocument(1, 1);
+		for (AnalyzedPage page : doc.getAnalyzedPageList()) {
+			assertEquals(expectedAnalyzedPage.get(index).getPageNumber(), page.getPageNumber());
+			index++;
+		}
 		
 	}
+	
+	@Test
+	public void testMakeDocument() throws IOException {
+		DocAnalyzer doc = new DocAnalyzer(passingInAnalyzedPage);
+		doc.filterDocument(2, 1);				
+		Assert.assertNotNull(doc.makeDocument());  //Checks for null
+		assertEquals(doc.makeDocument().getClass().getName(), "org.apache.pdfbox.pdmodel.PDDocument");
+	}
+
+
+
 
 }
