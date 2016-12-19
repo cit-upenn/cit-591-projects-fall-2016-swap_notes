@@ -34,6 +34,7 @@ public class DocPrinter {
 	public void saveDocumentAs(String outputDirectory, String outputFileName) throws IOException {
 		
 		documentToPrint.save(outputDirectory + "/" + outputFileName + ".pdf");
+		documentToPrint.close();
 	}
 
 
