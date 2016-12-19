@@ -18,56 +18,56 @@ public class FileInputFilterTest {
 //	@Before
 //	public void setUp() throws Exception {
 //	}
+	
+	private ArrayList<String> keywords;
+	private FileInputFilter filterTest;
+	private File pdfFile;
+	private PDDocument pDoc;
+	private PDPage page1;
+	private PDPage page2;
+	private PDFTextStripper pageStripper;
+	private String pageOneContents;
+	private String pageTwoContents;
+	private AnalyzedPage firstAnalyzedPage;
+	private AnalyzedPage secondAnalyzedPage;
+	private ArrayList<AnalyzedPage> passingInAnalyzedPage;
+	
+	@Before
+	public void setUp() throws Exception {
+		keywords = new ArrayList<String>();
+		keywords.add("paul");
+		filterTest = new FileInputFilter("hw2.pdf", keywords, "and");
+		pdfFile = new File("hw2.pdf");
+		pDoc = PDDocument.load(pdfFile);
+		page1 = pDoc.getPage(0);
+		pageStripper = new PDFTextStripper();
+	    pageStripper.setStartPage(1);
+	    pageStripper.setEndPage(1);
+	    pageOneContents = pageStripper.getText(pDoc).toLowerCase();
+		firstAnalyzedPage = new AnalyzedPage(page1, 1, keywords, pageOneContents, 0);
+	}
 
 	@Test
 	public void testFilterAnd() throws IOException {
-		ArrayList<String> keywords = new ArrayList<String>();
-		keywords.add("paul");
 		keywords.add("margins");
-		FileInputFilter test = new FileInputFilter("hw2.pdf", keywords, "and");
-		
-		File pdfFile = new File("hw2.pdf");
-		PDDocument pdoc = PDDocument.load(pdfFile);
-		PDPage page = pdoc.getPage(0);
-		
-		PDFTextStripper pageStripper = new PDFTextStripper();
-	    pageStripper.setStartPage(1);
-	    pageStripper.setEndPage(1);
-	    String contents = pageStripper.getText(pdoc).toLowerCase();
-		
-		AnalyzedPage analyzedPage = new AnalyzedPage(page, 1, keywords, contents, 0);
 		ArrayList<AnalyzedPage> testVectorTable = new ArrayList<AnalyzedPage>();
-		testVectorTable.add(analyzedPage);
-		Assert.assertTrue(EqualsBuilder.reflectionEquals(testVectorTable, test.getVectorTable()));
+		testVectorTable.add(firstAnalyzedPage);
+		assertTrue(EqualsBuilder.reflectionEquals(testVectorTable, filterTest.getVectorTable()));
 
 	}
 	
 	@Test
 	public void testFilterOr() throws IOException {
-		ArrayList<String> keywords = new ArrayList<String>();
-		keywords.add("paul");
 		keywords.add("instructor");
-		FileInputFilter test = new FileInputFilter("hw2.pdf", keywords, "or");
-		
-		File pdfFile = new File("hw2.pdf");
-		PDDocument pdoc = PDDocument.load(pdfFile);
-		PDPage page1 = pdoc.getPage(0);
-		PDPage page2 = pdoc.getPage(1);
-		
-		PDFTextStripper pageStripper = new PDFTextStripper();
-	    pageStripper.setStartPage(1);
-	    pageStripper.setEndPage(1);
-	    String contents1 = pageStripper.getText(pdoc).toLowerCase();
+		FileInputFilter filterTestOr = new FileInputFilter("hw2.pdf", keywords, "or");		
 	    pageStripper.setStartPage(2);
 	    pageStripper.setEndPage(2);
-	    String contents2 = pageStripper.getText(pdoc).toLowerCase();
-		
-		AnalyzedPage analyzedPage1 = new AnalyzedPage(page1, 1, keywords, contents1, 0);
-		AnalyzedPage analyzedPage2 = new AnalyzedPage(page2, 2, keywords, contents2, 0);
+	    String pageTwoContents = pageStripper.getText(pDoc).toLowerCase();
+		AnalyzedPage secondAnalyzedPage = new AnalyzedPage(page2, 2, keywords, pageTwoContents, 0);
 		ArrayList<AnalyzedPage> testVectorTable = new ArrayList<AnalyzedPage>();
-		testVectorTable.add(analyzedPage1);
-		testVectorTable.add(analyzedPage2);
-		Assert.assertTrue(EqualsBuilder.reflectionEquals(testVectorTable, test.getVectorTable()));
+		testVectorTable.add(firstAnalyzedPage);
+		testVectorTable.add(secondAnalyzedPage);
+		assertTrue(EqualsBuilder.reflectionEquals(testVectorTable, filterTestOr.getVectorTable()));
 
 	}
 
