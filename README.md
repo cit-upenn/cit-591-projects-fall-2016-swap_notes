@@ -1,7 +1,7 @@
 # Swap Notes
 
 ## About
-Swap Notes is an application that condenses a PDF file to an abridged version based on user input. 
+Swap Notes is an application that creates an abridged version of a PDF file based on user input. 
 
 
 ## Structure
@@ -22,7 +22,7 @@ Contains images relevant to the project, instructions, etc.
 
 ## Design
 
-Swap Notes is implemented through the following five classes.
+Swap Notes is implemented with the following five classes.
 
 1. GuiMain: Main class that takes user input and runs the program.
 2. FileInputFilter: Takes a file as input and filters the pages that meets the keyword condition.
@@ -42,7 +42,7 @@ We use an adjusted version of the Vector Space Model described in Chapter 14 of 
 
 In our model, each pdf page is a vector in an n-dimensional vector space, where n denotes the number of distinct words in the universe. The length and the direction of the vector represents the frequency of each word. In other words, a page is represented as an unordered collection of words. 
 
-After obtaining the log-weighted normalized value for each vector, we use the cosine value between each vector to measure their similarity. In this case, the cosine is simply the dot product of the two vectors.
+After obtaining the log-weighted normalized value for each vector, we use the cosine value (angular difference) between each vector to measure their similarity. In this case, the cosine is simply the dot product of the two vectors.
 
 We use array lists to store the keywords and use hash maps to contain the score (cosine values).
 
