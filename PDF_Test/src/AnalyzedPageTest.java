@@ -13,7 +13,6 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class AnalyzedPageTest {
 
